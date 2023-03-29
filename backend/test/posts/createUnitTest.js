@@ -1,11 +1,16 @@
+import { describe, it, after } from "mocha";
 import chai from "chai";
 import chaiHttp from "chai-http";
 import { server } from "../../index.js";
+import Post from "../../model/postModel.js"
 
 chai.should();
 chai.use(chaiHttp);
 
 describe("post/create test suite", () => {
+  after( async () => {
+    await Post.deleteMany({});
+  })
   //should create the post successfully if the title and description are provided
 
   it("should create the post successfully if the title and description are provided", (done) => {

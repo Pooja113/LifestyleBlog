@@ -4,7 +4,7 @@ import crypto from "crypto";
 import UserModel from "../model/userModel.js";
 import sendEmail from "../utils/sendEmail.js";
 
-export const register = async (req, res) => {
+export const register = async (req, res, next) => {
   try {
     const { firstname, lastname, username, email, password } = req.body;
 
@@ -29,7 +29,12 @@ export const register = async (req, res) => {
     );
     res.status(201).json({ result, token });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    if (error.code === 11000) {
+      res.status(500).json({ message: "Username must be unique" });
+    } else {
+      res.status(500).json({ message: error.message });
+    }
+    //res.status(500).json({ message: error.message });
   }
 };
 
